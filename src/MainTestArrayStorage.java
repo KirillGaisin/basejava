@@ -22,8 +22,11 @@ public class MainTestArrayStorage {
         System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
 
         printAll();
+        System.out.println("Deleting resume with uuid " + r1.uuid);
         ARRAY_STORAGE.delete(r1.uuid);
-        printAll();
+        System.out.println("Get r1 after deletion: " + ARRAY_STORAGE.get(r1.uuid));
+//        printAll();
+        System.out.println("Clearing storage");
         ARRAY_STORAGE.clear();
         printAll();
 
