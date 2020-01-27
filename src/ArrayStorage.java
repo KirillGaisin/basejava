@@ -22,10 +22,7 @@ public class ArrayStorage {
 
     void save(Resume r) {
         // not null-safe
-        if (size == 0) {
-            storage[0] = r;
-            size++;
-        } else {
+        if(size != 0) {
             for (int i = 0; i < size; i++) {
                 if (storage[i].getUuid().equals(r.getUuid())) {
                     System.out.println("----------------------------\n" +
@@ -33,9 +30,9 @@ public class ArrayStorage {
                     return;
                 }
             }
-            storage[size] = r;
-            size++;
         }
+        storage[size] = r;
+        size++;
     }
 
     Resume get(String uuid) {
