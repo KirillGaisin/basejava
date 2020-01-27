@@ -12,7 +12,7 @@ public class ArrayStorage {
     void clear() {
         for (int i = size - 1; i >= 0; i--) {
             storage[i] = null;
-            size--;
+            size = 0;
         }
     }
 
@@ -40,8 +40,7 @@ public class ArrayStorage {
     void delete(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
-                storage[i] = null;
-                System.arraycopy(storage, i + 1, storage, i, size - 1);
+                System.arraycopy(storage, i + 1, storage, i, size - i - 1);
                 size--;
                 break;
             }
