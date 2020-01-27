@@ -4,65 +4,72 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10];
+    Resume[] storage = new Resume[10000];
+
+    private int size = 0;
 
     void clear() {
-        for(Resume r: storage) {
-            try {
-                r.setUuid(null);
-            } catch (NullPointerException ex) {
-                System.out.println("----------------------------\n" +
-                        "Resume storage has been successfully cleared.");
-                break;
+        if (size == 0) {
+            System.out.println("----------------------------\n" +
+                    "Resume storage is already empty.");
+        } else {
+            for (int i = size - 1; i >= 0; i--) {
+                storage[i] = null;
+                size--;
             }
         }
     }
 
     void save(Resume r) {
-        for (int i = 0; i < storage.length; i++) {
-            try {
+        // not null-safe
+        if (size == 0) {
+            storage[0] = r;
+            size++;
+        } else {
+            for (int i = 0; i < size; i++) {
                 if (storage[i].getUuid().equals(r.getUuid())) {
                     System.out.println("----------------------------\n" +
                             "Resume with this uuid is already in the storage! Enter another command");
                     return;
                 }
-            } catch (NullPointerException ex) {
-                storage[i] = r;
-                break;
             }
+            storage[size] = r;
+            size++;
         }
     }
 
     Resume get(String uuid) {
-        // метод выбивается из общего принципа логгирования при поимке нпе из-за необходимости вернуть значение; не нравится дважды return null
-        for (Resume r:storage) {
-            try {
-                if (r.getUuid().equals(uuid))
-                    return r;
-            } catch (NullPointerException ex) {
-                return null;
+        if (size == 0) {
+            System.out.println("----------------------------\n" +
+                    "Resume storage is empty.");
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (storage[i].getUuid().equals(uuid))
+                    return storage[i];
             }
         }
         return null;
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < storage.length; i++) {
-            try {
+        if (size == 0) {
+            System.out.println("----------------------------\n" +
+                    "Resume storage is empty.");
+        } else {
+            for (int i = size - 1; i >= 0; i--) {
                 if (storage[i].getUuid().equals(uuid)) {
-                    storage[i].setUuid(null);
-                    // из-за этого цикла падаем в блок кетч, поэтому нет сообщения об ошибке при удалении несуществующего элемента (костыльно)
-                    for (int j = i + 1; j < storage.length; j++) {
-                        if (storage[j] != null) {
-                            storage[i] = storage[j];
-                            storage[j] = null;
-                            i++;
-                        }
+                    storage[i] = null;
+                    for (int j = i; j < size; j++) {
+                        Resume temp = storage[j + 1];
+                        storage[j + 1] = storage[j];
+                        storage[j] = temp;
                     }
+                    size--;
                     break;
+                } else if (i == 0 && !storage[i].getUuid().equals(uuid)) {
+                    System.out.println("----------------------------\n" +
+                            "No such element present in the storage");
                 }
-            } catch (NullPointerException ex) {
-                return;
             }
         }
     }
@@ -71,18 +78,14 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume[] noNulls = new Resume[10];
-        // почему при вызове метода delete на последнем не нулевом элементе массива null остается в массиве в этом методе?
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                noNulls = Arrays.copyOf(storage, i);
-                break;
-            }
+        Resume[] resumes = new Resume[size];
+        for (int i = 0; i <= size; i++) {
+            resumes = Arrays.copyOf(storage, i);
         }
-        return noNulls;
+        return resumes;
     }
 
     int size() {
-        return storage.length;
+        return size;
     }
 }
