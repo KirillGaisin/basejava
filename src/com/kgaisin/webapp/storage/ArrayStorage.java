@@ -36,7 +36,7 @@ public class ArrayStorage {
                 return;
             }
         }
-        if(storage[storage.length-1] != null) {
+        if (storage[storage.length - 1] != null) {
             System.out.println("----------------------------\n" +
                     "Resume storage is full. Delete entries or clear the storage to add a new one");
             return;
@@ -46,8 +46,8 @@ public class ArrayStorage {
     }
 
     public void update(Resume r) {
-        for(int i=0; i<size; i++) {
-            if(storage[i].getUuid().equals(r.getUuid())) {
+        for (int i = 0; i < size; i++) {
+            if (storage[i].getUuid().equals(r.getUuid())) {
                 System.out.println("----------------------------\n" +
                         "Resume with uuid " + r.getUuid() + " updated.");
                 return;
