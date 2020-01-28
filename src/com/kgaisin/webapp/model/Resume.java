@@ -1,3 +1,5 @@
+package com.kgaisin.webapp.model;
+
 /**
  * Initial resume class
  */
@@ -20,7 +22,7 @@ public class Resume {
     }
 
     // Unique identifier
-    String uuid;
+    private String uuid;
 
     @Override
     public String toString() {
