@@ -5,9 +5,8 @@ package com.kgaisin.webapp.model;
  */
 public class Resume {
 
-    public Resume() {
-
-    }
+    // Unique identifier
+    private String uuid;
 
     public Resume(String uuid) {
         this.uuid = uuid;
@@ -16,13 +15,6 @@ public class Resume {
     public String getUuid() {
         return uuid;
     }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    // Unique identifier
-    private String uuid;
 
     @Override
     public String toString() {

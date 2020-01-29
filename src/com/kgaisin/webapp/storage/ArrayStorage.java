@@ -23,38 +23,49 @@ public class ArrayStorage {
     private int size = 0;
 
     public void clear() {
-        Arrays.fill(storage, null);
+        if (size == 0)
+            return;
+        Arrays.fill(storage, 0, size - 1, null);
         size = 0;
     }
 
-    public void save(Resume r) {
+    public void save(Resume resume) {
         //not null-safe
         for (int i = 0; i < size; i++) {
-            if (storage[i].getUuid().equals(r.getUuid())) {
+            if (storage[i].getUuid().equals(resume.getUuid())) {
                 System.out.println("----------------------------\n" +
-                        "Resume with this uuid is already in the storage! Enter another command");
+                        "Resume with uuid " + resume.getUuid() + " is already in the storage! Enter another command");
                 return;
             }
         }
-        if(storage[storage.length-1] != null) {
+
+        //проверка на заполненность storage
+        if (storage[storage.length - 1] != null) {
             System.out.println("----------------------------\n" +
                     "Resume storage is full. Delete entries or clear the storage to add a new one");
             return;
         }
-        storage[size] = r;
+        storage[size] = resume;
         size++;
+
+        //проверка на наличие сохраненного резюме в storage
+        for (int i = 0; i < size; i++) {
+            if (storage[i].getUuid().equals(resume.getUuid()))
+                return;
+        }
+        System.out.println("Resume with uuid " + resume.getUuid() + " was not added to the storage! Enter another command");
     }
 
-    public void update(Resume r) {
-        for(int i=0; i<size; i++) {
-            if(storage[i].getUuid().equals(r.getUuid())) {
+    public void update(Resume resume) {
+        for (int i = 0; i < size; i++) {
+            if (storage[i].getUuid().equals(resume.getUuid())) {
                 System.out.println("----------------------------\n" +
-                        "Resume with uuid " + r.getUuid() + " updated.");
+                        "Resume with uuid " + resume.getUuid() + " updated.");
                 return;
             }
         }
         System.out.println("----------------------------\n" +
-                "Resume with uuid " + r.getUuid() + " not found.");
+                "Resume with uuid " + resume.getUuid() + " not found.");
     }
 
     public Resume get(String uuid) {
