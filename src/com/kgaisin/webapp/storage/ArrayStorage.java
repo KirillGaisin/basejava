@@ -20,41 +20,37 @@ public class ArrayStorage {
 
     public void save(Resume resume) {
         //not null-safe
-        if (checkForResumePresence(resume) >= 0) {
-            System.out.println("----------------------------\n" +
-                    "Resume with uuid " + resume.getUuid() + " is already in the storage! Enter another command");
+        if (checkForResumeDupe(resume.getUuid())) {
             return;
         }
 
         //проверка на заполненность storage
-        if (storage[storage.length - 1] != null) {
+        if (size >= storage.length) {
             System.out.println("----------------------------\n" +
                     "Resume storage is full. Delete entries or clear the storage to add a new one");
             return;
         }
         storage[size] = resume;
         size++;
-
-        //проверка на наличие сохраненного резюме в storage
-        if(checkForResumePresence(resume) >= 0) {
-            return;
-        }
-        System.out.println("Resume with uuid " + resume.getUuid() + " was not added to the storage! Enter another command");
     }
 
-    public void update(Resume resume) {
-        if (checkForResumePresence(resume) >= 0) {
+    public void update(Resume oldResume, Resume newResume) {
+        if (checkForResumeDupe(newResume.getUuid())) {
+            return;
+        } else if (checkForResumePresence(oldResume.getUuid()) >= 0) {
+            int index = checkForResumePresence(oldResume.getUuid());
+            storage[index] = newResume;
             System.out.println("----------------------------\n" +
-                    "Resume with uuid " + resume.getUuid() + " updated.");
+                    "Resume with uuid " + oldResume.getUuid() + " updated. New uuid is " + newResume.getUuid());
             return;
         }
         System.out.println("----------------------------\n" +
-                "Resume with uuid " + resume.getUuid() + " not found.");
+                "Resume with uuid " + oldResume.getUuid() + " not found.");
     }
 
     public Resume get(String uuid) {
         Resume resumeToSearch = new Resume(uuid);
-        if (checkForResumePresence(resumeToSearch) >= 0) {
+        if (checkForResumePresence(resumeToSearch.getUuid()) >= 0) {
             return resumeToSearch;
         }
         return null;
@@ -62,10 +58,10 @@ public class ArrayStorage {
 
     public void delete(String uuid) {
         Resume resumeToDelete = new Resume(uuid);
-        if(checkForResumePresence(resumeToDelete) >= 0) {
-            int elementToDelete = checkForResumePresence(resumeToDelete);
-            storage[elementToDelete] = storage[size-1];
-            storage[size-1] = null;
+        if (checkForResumePresence(resumeToDelete.getUuid()) >= 0) {
+            int index = checkForResumePresence(resumeToDelete.getUuid());
+            storage[index] = storage[size - 1];
+            storage[size - 1] = null;
             size--;
             return;
         }
@@ -84,12 +80,21 @@ public class ArrayStorage {
         return size;
     }
 
-    private int checkForResumePresence(Resume resume) {
+    private int checkForResumePresence(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (storage[i].getUuid().equals(resume.getUuid())) {
+            if (storage[i].getUuid().equals(uuid)) {
                 return i;
             }
         }
         return -1;
+    }
+
+    private boolean checkForResumeDupe(String uuid) {
+        if (checkForResumePresence(uuid) >= 0) {
+            System.out.println("----------------------------\n" +
+                    "Resume with uuid " + uuid + " is already in the storage! Enter another command");
+            return true;
+        }
+        return false;
     }
 }
