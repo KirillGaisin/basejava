@@ -42,10 +42,7 @@ public class MainArray {
                     break;
                 case "update":
                     resume = new Resume(uuid);
-                    System.out.println("Введите uuid нового резюме.");
-                    String newUuid = reader.readLine().trim().toLowerCase();
-                    Resume newResume = new Resume(newUuid);
-                    ARRAY_STORAGE.update(resume, newResume);
+                    ARRAY_STORAGE.update(resume);
                     printAll();
                     break;
                 case "delete":

@@ -20,7 +20,9 @@ public class ArrayStorage {
 
     public void save(Resume resume) {
         //not null-safe
-        if (checkForResumeDupe(resume.getUuid())) {
+        if (checkForResumePresence(resume.getUuid()) >= 0) {
+            System.out.println("----------------------------\n" +
+                    "Resume with uuid " + resume.getUuid() + " is already in the storage! Enter another command");
             return;
         }
 
@@ -34,18 +36,16 @@ public class ArrayStorage {
         size++;
     }
 
-    public void update(Resume oldResume, Resume newResume) {
-        if (checkForResumeDupe(newResume.getUuid())) {
-            return;
-        } else if (checkForResumePresence(oldResume.getUuid()) >= 0) {
-            int index = checkForResumePresence(oldResume.getUuid());
-            storage[index] = newResume;
+    public void update(Resume resume) {
+        if (checkForResumePresence(resume.getUuid()) >= 0) {
+            int index = checkForResumePresence(resume.getUuid());
+            storage[index] = resume;
             System.out.println("----------------------------\n" +
-                    "Resume with uuid " + oldResume.getUuid() + " updated. New uuid is " + newResume.getUuid());
+                    "Resume with uuid " + resume.getUuid() + " updated.");
             return;
         }
         System.out.println("----------------------------\n" +
-                "Resume with uuid " + oldResume.getUuid() + " not found.");
+                "Resume with uuid " + resume.getUuid() + " not found.");
     }
 
     public Resume get(String uuid) {
@@ -57,9 +57,8 @@ public class ArrayStorage {
     }
 
     public void delete(String uuid) {
-        Resume resumeToDelete = new Resume(uuid);
-        if (checkForResumePresence(resumeToDelete.getUuid()) >= 0) {
-            int index = checkForResumePresence(resumeToDelete.getUuid());
+        if (checkForResumePresence(uuid) >= 0) {
+            int index = checkForResumePresence(uuid);
             storage[index] = storage[size - 1];
             storage[size - 1] = null;
             size--;
@@ -87,14 +86,5 @@ public class ArrayStorage {
             }
         }
         return -1;
-    }
-
-    private boolean checkForResumeDupe(String uuid) {
-        if (checkForResumePresence(uuid) >= 0) {
-            System.out.println("----------------------------\n" +
-                    "Resume with uuid " + uuid + " is already in the storage! Enter another command");
-            return true;
-        }
-        return false;
     }
 }
