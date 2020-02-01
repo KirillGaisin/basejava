@@ -49,9 +49,9 @@ public class ArrayStorage {
     }
 
     public Resume get(String uuid) {
-        Resume resumeToSearch = new Resume(uuid);
-        if (checkForResumePresence(resumeToSearch.getUuid()) >= 0) {
-            return resumeToSearch;
+        if (checkForResumePresence(uuid) >= 0) {
+            int index = checkForResumePresence(uuid);
+            return storage[index];
         }
         return null;
     }
