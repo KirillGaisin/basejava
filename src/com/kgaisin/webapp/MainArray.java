@@ -1,7 +1,9 @@
 package com.kgaisin.webapp;
 
 import com.kgaisin.webapp.model.Resume;
+import com.kgaisin.webapp.storage.AbstractArrayStorage;
 import com.kgaisin.webapp.storage.ArrayStorage;
+import com.kgaisin.webapp.storage.SortedArrayStorage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,11 +14,18 @@ import java.io.InputStreamReader;
  * (just run, no need to understand)
  */
 public class MainArray {
-    private final static ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+    private static AbstractArrayStorage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Resume resume;
+
+        System.out.println("Для работы с сортированным хранилищем введите sorted.");
+        String arrayType = reader.readLine().trim().toLowerCase();
+        if(arrayType.equals("sorted")) {
+            ARRAY_STORAGE = new SortedArrayStorage();
+        }
+
         while (true) {
             System.out.print("Введите одну из команд - (list | save uuid | update uuid | delete uuid | get uuid | clear | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
