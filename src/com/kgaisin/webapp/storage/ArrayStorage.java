@@ -7,6 +7,7 @@ import com.kgaisin.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
+    @Override
     public void save(Resume resume) {
         if (checkForResumePresence(resume.getUuid()) >= 0) {
             System.out.println("----------------------------\n" +
@@ -24,6 +25,7 @@ public class ArrayStorage extends AbstractArrayStorage {
         size++;
     }
 
+    @Override
     public void delete(String uuid) {
         if (checkForResumePresence(uuid) >= 0) {
             int index = checkForResumePresence(uuid);

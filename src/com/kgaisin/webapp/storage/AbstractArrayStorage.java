@@ -9,6 +9,10 @@ public abstract class AbstractArrayStorage implements Storage {
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
+    public abstract void save(Resume resume);
+
+    public abstract void delete(String uuid);
+
     public void update(Resume resume) {
         int index = checkForResumePresence(resume.getUuid());
         if (checkForResumePresence(resume.getUuid()) >= 0) {
@@ -38,7 +42,6 @@ public abstract class AbstractArrayStorage implements Storage {
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        // в коммите почему-то copyOfRange(storage, 0, size), посмотреть почему
         return Arrays.copyOf(storage, size);
     }
 

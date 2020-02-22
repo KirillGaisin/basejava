@@ -8,6 +8,11 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     public void save(Resume resume) {
+        if (size >= storage.length) {
+            System.out.println("----------------------------\n" +
+                    "Resume storage is full. Delete entries or clear the storage to add a new one");
+            return;
+        }
         if (checkForResumePresence(resume.getUuid()) < 0) {
             int index = -(checkForResumePresence(resume.getUuid()) + 1);
             if (storage[index] != null) {
@@ -15,6 +20,9 @@ public class SortedArrayStorage extends AbstractArrayStorage {
             }
             storage[index] = resume;
             size++;
+        } else {
+            System.out.println("----------------------------\n" +
+                    "Resume with uuid " + resume.getUuid() + " is already in the storage! Enter another command");
         }
     }
 
