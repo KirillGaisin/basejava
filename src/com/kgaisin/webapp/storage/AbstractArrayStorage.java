@@ -5,17 +5,43 @@ import com.kgaisin.webapp.model.Resume;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
-    protected static final int STORAGE_LIMIT = 10;
+    protected static final int STORAGE_LIMIT = 4;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
-    public abstract void save(Resume resume);
+    public void save(Resume resume) {
+        // проверка на заполненность storage
+        if (size >= storage.length) {
+            System.out.println("----------------------------\n" +
+                    "Resume storage is full. Delete entries or clear the storage to add a new one");
+            return;
+        }
 
-    public abstract void delete(String uuid);
+        // проверка на присутствие в storage добавляемого резюме
+        if (checkForResumePresence(resume.getUuid()) >= 0) {
+            System.out.println("----------------------------\n" +
+                    "Resume with uuid " + resume.getUuid() + " is already in the storage! Enter another command");
+            return;
+        }
+
+        addResume(resume);
+        size++;
+    }
+
+    public void delete(String uuid) {
+        int index = checkForResumePresence(uuid);
+        if (index >= 0) {
+            removeResume(index);
+            size--;
+            return;
+        }
+        System.out.println("----------------------------\n" +
+                "Resume with uuid " + uuid + " not found.");
+    }
 
     public void update(Resume resume) {
         int index = checkForResumePresence(resume.getUuid());
-        if (checkForResumePresence(resume.getUuid()) >= 0) {
+        if (index >= 0) {
             storage[index] = resume;
             System.out.println("----------------------------\n" +
                     "Resume with uuid " + resume.getUuid() + " updated.");
@@ -27,7 +53,7 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public Resume get(String uuid) {
         int index = checkForResumePresence(uuid);
-        if (checkForResumePresence(uuid) >= 0) {
+        if (index >= 0) {
             return storage[index];
         }
         return null;
@@ -48,6 +74,10 @@ public abstract class AbstractArrayStorage implements Storage {
     public int size() {
         return size;
     }
+
+    public abstract void addResume(Resume resume);
+
+    public abstract void removeResume(int index);
 
     protected abstract int checkForResumePresence(String uuid);
 }

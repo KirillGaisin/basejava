@@ -8,34 +8,14 @@ import com.kgaisin.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void save(Resume resume) {
-        if (checkForResumePresence(resume.getUuid()) >= 0) {
-            System.out.println("----------------------------\n" +
-                    "Resume with uuid " + resume.getUuid() + " is already in the storage! Enter another command");
-            return;
-        }
-
-        //проверка на заполненность storage
-        if (size >= storage.length) {
-            System.out.println("----------------------------\n" +
-                    "Resume storage is full. Delete entries or clear the storage to add a new one");
-            return;
-        }
+    public void addResume(Resume resume) {
         storage[size] = resume;
-        size++;
     }
 
     @Override
-    public void delete(String uuid) {
-        if (checkForResumePresence(uuid) >= 0) {
-            int index = checkForResumePresence(uuid);
-            storage[index] = storage[size - 1];
-            storage[size - 1] = null;
-            size--;
-            return;
-        }
-        System.out.println("----------------------------\n" +
-                "Resume with uuid " + uuid + " not found.");
+    public void removeResume(int index) {
+        storage[index] = storage[size - 1];
+        storage[size - 1] = null;
     }
 
     @Override
