@@ -11,7 +11,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         if (checkForResumePresence(resume.getUuid()) < 0) {
             int index = -(checkForResumePresence(resume.getUuid()) + 1);
             if (storage[index] != null) {
-                System.arraycopy(storage, index, storage, index + 1, size - index + 1);
+                System.arraycopy(storage, index, storage, index + 1, size - index);
             }
             storage[index] = resume;
         }
