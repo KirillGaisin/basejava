@@ -7,9 +7,9 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void addResume(Resume resume) {
-        if (checkForResumePresence(resume.getUuid()) < 0) {
-            int index = -(checkForResumePresence(resume.getUuid()) + 1);
+    public void addResume(Resume resume, int index) {
+        if (index < 0) {
+            index = -(index + 1);
             if (storage[index] != null) {
                 System.arraycopy(storage, index, storage, index + 1, size - index);
             }

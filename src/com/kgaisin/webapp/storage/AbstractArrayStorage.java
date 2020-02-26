@@ -18,13 +18,14 @@ public abstract class AbstractArrayStorage implements Storage {
         }
 
         // проверка на присутствие в storage добавляемого резюме
-        if (checkForResumePresence(resume.getUuid()) >= 0) {
+        int index = checkForResumePresence(resume.getUuid());
+        if (index >= 0) {
             System.out.println("----------------------------\n" +
                     "Resume with uuid " + resume.getUuid() + " is already in the storage! Enter another command");
             return;
         }
 
-        addResume(resume);
+        addResume(resume, index);
         size++;
     }
 
@@ -32,6 +33,7 @@ public abstract class AbstractArrayStorage implements Storage {
         int index = checkForResumePresence(uuid);
         if (index >= 0) {
             removeResume(index);
+            storage[size - 1] = null;
             size--;
             return;
         }
@@ -54,8 +56,6 @@ public abstract class AbstractArrayStorage implements Storage {
     public Resume get(String uuid) {
         int index = checkForResumePresence(uuid);
         if (index >= 0) {
-            System.out.println("----------------------------\n" +
-                    "Resume found at position " + (index + 1));
             return storage[index];
         }
         System.out.println("----------------------------\n" +
@@ -79,7 +79,7 @@ public abstract class AbstractArrayStorage implements Storage {
         return size;
     }
 
-    public abstract void addResume(Resume resume);
+    public abstract void addResume(Resume resume, int index);
 
     public abstract void removeResume(int index);
 
