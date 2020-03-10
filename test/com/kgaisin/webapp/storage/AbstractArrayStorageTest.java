@@ -1,6 +1,10 @@
 package com.kgaisin.webapp.storage;
 
+import com.kgaisin.webapp.exception.ResumeInStorageException;
+import com.kgaisin.webapp.exception.ResumeNotFoundException;
+import com.kgaisin.webapp.exception.StorageException;
 import com.kgaisin.webapp.model.Resume;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,6 +44,7 @@ public class AbstractArrayStorageTest {
     public void delete() {
         storage.delete(UUID_1);
         assertEquals(2, storage.size());
+        assertNotEquals(RESUME_1, storage.get(UUID_1));
     }
 
     @Test
@@ -50,8 +55,8 @@ public class AbstractArrayStorageTest {
 
     @Test
     public void get() {
-        storage.get(UUID_1);
-        assertEquals(RESUME_1, storage.get(UUID_1));
+        Resume newResume = storage.get(UUID_1);
+        assertEquals(RESUME_1, newResume);
     }
 
     @Test
@@ -62,13 +67,43 @@ public class AbstractArrayStorageTest {
 
     @Test
     public void getAll() {
-        Resume[] newResumes = new Resume[] {RESUME_1, RESUME_2, RESUME_3};
-        storage.getAll();
-        assertEquals(newResumes, storage.getAll());
+        Resume[] testResumes = storage.getAll();
+        assertEquals(RESUME_1, testResumes[0]);
+        assertEquals(RESUME_2, testResumes[1]);
+        assertEquals(RESUME_3, testResumes[2]);
     }
 
     @Test
     public void size() {
         assertEquals(3, storage.size());
+    }
+
+    @Test(expected = ResumeInStorageException.class)
+    public void saveExisting() {
+        storage.save(RESUME_1);
+    }
+
+    @Test(expected = ResumeNotFoundException.class)
+    public void updateNonexistent() {
+        storage.update(new Resume("nothing"));
+    }
+
+    @Test(expected = ResumeNotFoundException.class)
+    public void deleteNonexistent() {
+        storage.delete("nothing");
+    }
+
+    @Test(expected = StorageException.class)
+    public void storageOverflow() {
+        try {
+            for (int i = 4; i <= AbstractArrayStorage.STORAGE_LIMIT; i++) {
+                storage.save(new Resume("should_not_add"));
+            }
+
+        } catch (StorageException ex) {
+            Assert.fail();
+        }
+        //добавление резюме сверх лимита
+        storage.save(new Resume("should_not_add"));
     }
 }

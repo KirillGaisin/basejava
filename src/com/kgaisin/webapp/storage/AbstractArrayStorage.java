@@ -1,5 +1,8 @@
 package com.kgaisin.webapp.storage;
 
+import com.kgaisin.webapp.exception.ResumeInStorageException;
+import com.kgaisin.webapp.exception.ResumeNotFoundException;
+import com.kgaisin.webapp.exception.StorageException;
 import com.kgaisin.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -12,17 +15,13 @@ public abstract class AbstractArrayStorage implements Storage {
     public void save(Resume resume) {
         // проверка на заполненность storage
         if (size >= storage.length) {
-            System.out.println("----------------------------\n" +
-                    "Resume storage is full. Delete entries or clear the storage to add a new one");
-            return;
+            throw new StorageException("Resume storage is full", resume.getUuid());
         }
 
         // проверка на присутствие в storage добавляемого резюме
         int index = checkForResumePresence(resume.getUuid());
         if (index >= 0) {
-            System.out.println("----------------------------\n" +
-                    "Resume with uuid " + resume.getUuid() + " is already in the storage! Enter another command");
-            return;
+            throw new ResumeInStorageException(resume.getUuid());
         }
 
         addResume(resume, index);
@@ -37,8 +36,7 @@ public abstract class AbstractArrayStorage implements Storage {
             size--;
             return;
         }
-        System.out.println("----------------------------\n" +
-                "Resume with uuid " + uuid + " not found.");
+        throw new ResumeNotFoundException(uuid);
     }
 
     public void update(Resume resume) {
@@ -49,8 +47,7 @@ public abstract class AbstractArrayStorage implements Storage {
                     "Resume with uuid " + resume.getUuid() + " updated.");
             return;
         }
-        System.out.println("----------------------------\n" +
-                "Resume with uuid " + resume.getUuid() + " not found.");
+        throw new ResumeNotFoundException(resume.getUuid());
     }
 
     public Resume get(String uuid) {
@@ -58,9 +55,7 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index >= 0) {
             return storage[index];
         }
-        System.out.println("----------------------------\n" +
-                "Resume with uuid " + uuid + " not found.");
-        return null;
+        throw new ResumeNotFoundException(uuid);
     }
 
     public void clear() {
