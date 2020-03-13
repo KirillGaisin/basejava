@@ -4,7 +4,6 @@ import com.kgaisin.webapp.exception.ResumeInStorageException;
 import com.kgaisin.webapp.exception.ResumeNotFoundException;
 import com.kgaisin.webapp.exception.StorageException;
 import com.kgaisin.webapp.model.Resume;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
