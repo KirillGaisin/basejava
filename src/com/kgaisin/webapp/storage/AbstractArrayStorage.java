@@ -43,8 +43,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     public void updateResume(Resume resume, int index) {
         storage[index] = resume;
-        System.out.println("----------------------------\n" +
-                "Resume with uuid " + resume.getUuid() + " updated.");
     }
 
     @Override

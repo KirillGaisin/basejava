@@ -37,10 +37,6 @@ public abstract class AbstractStorage implements Storage {
         return index;
     }
 
-    public abstract void clear();
-
-    public abstract Resume[] getAll();
-
     protected abstract void addResume(Resume resume, int index);
 
     protected abstract void removeResume(int index);

@@ -59,11 +59,15 @@ public abstract class AbstractArrayStorageTest {
         storage.save(new Resume("should_not_add"));
     }
 
-    @Test(expected = ResumeNotFoundException.class)
+    @Test
     public void delete() {
         storage.delete(UUID_1);
         assertEquals(2, storage.size());
-        assertNotEquals(RESUME_1, storage.get(UUID_1));
+        try {
+            assertNotEquals(RESUME_1, storage.get(UUID_1));
+        } catch (ResumeNotFoundException ex) {
+            return;
+        }
     }
 
     @Test(expected = ResumeNotFoundException.class)

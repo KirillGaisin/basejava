@@ -41,9 +41,9 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected int checkForResumePresence(String uuid) {
-        Resume toSearch = new Resume(uuid);
-        if(storage.contains(toSearch)) {
-            return 1;
+        Resume resume = new Resume(uuid);
+        if(storage.contains(resume)) {
+            return storage.indexOf(resume);
         }
         return -1;
     }
@@ -51,7 +51,5 @@ public class ListStorage extends AbstractStorage {
     @Override
     protected void updateResume(Resume resume, int index) {
         storage.set(index, resume);
-        System.out.println("----------------------------\n" +
-                "Resume with uuid " + resume.getUuid() + " updated.");
     }
 }
