@@ -2,13 +2,12 @@ package com.kgaisin.webapp.storage;
 
 import com.kgaisin.webapp.model.Resume;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class MapStorage extends AbstractStorage {
 
     private Map<String, Resume> storage = new LinkedHashMap<>();
-    private List<String> keys = new LinkedList<>();
-    private String uuid;
 
     @Override
     public Resume[] getAll() {
@@ -26,37 +25,31 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void addResume(Resume resume, int index) {
-        uuid = resume.getUuid();
-        storage.put(uuid, resume);
+    protected void addResume(Resume resume, Object id) {
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected void removeResume(int index) {
-        uuid = keys.get(index);
-        storage.remove(uuid);
-        keys.remove(uuid);
+    protected void removeResume(Object id) {
+        storage.remove(id.toString());
     }
 
     @Override
-    protected void updateResume(Resume resume, int index) {
-        uuid = keys.get(index);
-        storage.replace(uuid, resume);
+    protected void updateResume(Resume resume, Object id) {
+        storage.replace(id.toString(), resume);
     }
 
     @Override
-    protected Resume getResume(int index) {
-        uuid = keys.get(index);
-        return storage.get(uuid);
+    protected Resume getResume(Object id) {
+        return storage.get(id.toString());
     }
 
     @Override
-    protected int checkForResumePresence(String uuid) {
+    protected Object checkForResumePresence(String uuid) {
         Resume resume = new Resume(uuid);
         if(storage.containsValue(resume)) {
-            return keys.indexOf(uuid);
+            return uuid;
         }
-        keys.add(uuid);
         return -1;
     }
 }

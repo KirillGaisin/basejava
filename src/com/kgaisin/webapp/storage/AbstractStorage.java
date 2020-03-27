@@ -7,43 +7,43 @@ import com.kgaisin.webapp.model.Resume;
 public abstract class AbstractStorage implements Storage {
 
     public void save(Resume resume) {
-        int index = checkForResumePresence(resume.getUuid());
-        if (index >= 0) {
+        Object id = checkForResumePresence(resume.getUuid());
+        if ((id instanceof Integer && (Integer) id >= 0) || id.equals(resume.getUuid())) {
             throw new ResumeInStorageException(resume.getUuid());
         }
-        addResume(resume, index);
+        addResume(resume, id);
     }
 
     public void delete(String uuid) {
-        int index = checkIfResumeInStorage(uuid);
-        removeResume(index);
+        Object id = checkIfResumeInStorage(uuid);
+        removeResume(id);
     }
 
     public void update(Resume resume) {
-        int index = checkIfResumeInStorage(resume.getUuid());
-        updateResume(resume, index);
+        Object id = checkIfResumeInStorage(resume.getUuid());
+        updateResume(resume, id);
     }
 
     public Resume get(String uuid) {
-        int index = checkIfResumeInStorage(uuid);
-        return getResume(index);
+        Object id = checkIfResumeInStorage(uuid);
+        return getResume(id);
     }
 
-    private int checkIfResumeInStorage(String uuid) {
-        int index = checkForResumePresence(uuid);
-        if(index < 0) {
+    private Object checkIfResumeInStorage(String uuid) {
+        Object id = checkForResumePresence(uuid);
+        if (id instanceof Integer && (Integer) id < 0) {
             throw new ResumeNotFoundException(uuid);
         }
-        return index;
+        return id;
     }
 
-    protected abstract void addResume(Resume resume, int index);
+    protected abstract void addResume(Resume resume, Object id);
 
-    protected abstract void removeResume(int index);
+    protected abstract void removeResume(Object id);
 
-    protected abstract void updateResume(Resume resume, int index);
+    protected abstract void updateResume(Resume resume, Object id);
 
-    protected abstract Resume getResume(int index);
+    protected abstract Resume getResume(Object id);
 
-    protected abstract int checkForResumePresence(String uuid);
+    protected abstract Object checkForResumePresence(String uuid);
 }
