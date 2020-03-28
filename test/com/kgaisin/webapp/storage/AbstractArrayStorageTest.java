@@ -6,11 +6,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public abstract class AbstractArrayStorageTest {
+public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
 
-
-    //todo define constructor, work on test hierarchy
-    private Storage storage;
+    AbstractArrayStorageTest(Storage storage) {
+        super(storage);
+    }
 
     @Test(expected = StorageException.class)
     public void storageOverflow() {

@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
-    private Storage storage;
+    Storage storage;
 
     private static final String UUID_1 = "uuid1";
     private static final Resume RESUME_1 = new Resume(UUID_1);
@@ -22,7 +22,7 @@ public abstract class AbstractStorageTest {
     private static final String TEST_UUID = "test_uuid";
     private static final Resume TEST_RESUME = new Resume(TEST_UUID);
 
-    public AbstractStorageTest(Storage storage) {
+    AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
 
@@ -44,21 +44,6 @@ public abstract class AbstractStorageTest {
     @Test(expected = ResumeInStorageException.class)
     public void saveExisting() {
         storage.save(RESUME_1);
-    }
-
-    //should be moved to AbstractArrayStorageTest
-    @Test(expected = StorageException.class)
-    public void storageOverflow() {
-        try {
-            for (int i = 4; i <= AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                storage.save(new Resume("should_not_add"));
-            }
-
-        } catch (StorageException ex) {
-            fail("Unexpected exception while adding resumes to storage within storage limit");
-        }
-        //добавление резюме сверх лимита
-        storage.save(new Resume("should_not_add_too"));
     }
 
     @Test(expected = ResumeNotFoundException.class)
