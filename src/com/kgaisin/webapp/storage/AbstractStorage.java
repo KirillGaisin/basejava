@@ -8,9 +8,10 @@ public abstract class AbstractStorage implements Storage {
 
     public void save(Resume resume) {
         Object id = checkForResumePresence(resume.getUuid());
-        if ((id instanceof Integer && (Integer) id >= 0) || id.equals(resume.getUuid())) {
+        if (id.equals(resume.getUuid()) || (int) id >= 0) {
             throw new ResumeInStorageException(resume.getUuid());
         }
+
         addResume(resume, id);
     }
 

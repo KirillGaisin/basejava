@@ -42,7 +42,6 @@ public class ListStorage extends AbstractStorage {
     @Override
     protected Object checkForResumePresence(String uuid) {
         Resume resume = new Resume(uuid);
-        //падает на i <= storage.size() из-за indexOutOfBounds
         for (int i = 0; i < storage.size(); i++) {
             if (storage.get(i).compareTo(resume) == 0) {
                 return i;
