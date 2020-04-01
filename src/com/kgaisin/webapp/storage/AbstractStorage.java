@@ -1,7 +1,6 @@
 package com.kgaisin.webapp.storage;
 
 import com.kgaisin.webapp.exception.ResumeInStorageException;
-import com.kgaisin.webapp.exception.ResumeNotFoundException;
 import com.kgaisin.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
@@ -30,14 +29,6 @@ public abstract class AbstractStorage implements Storage {
         return getResume(id);
     }
 
-    private Object checkIfResumeInStorage(String uuid) {
-        Object id = checkForResumePresence(uuid);
-        if (id instanceof Integer && (Integer) id < 0) {
-            throw new ResumeNotFoundException(uuid);
-        }
-        return id;
-    }
-
     protected abstract void addResume(Resume resume, Object id);
 
     protected abstract void removeResume(Object id);
@@ -47,4 +38,6 @@ public abstract class AbstractStorage implements Storage {
     protected abstract Resume getResume(Object id);
 
     protected abstract Object checkForResumePresence(String uuid);
+
+    protected abstract Object checkIfResumeInStorage(String uuid);
 }

@@ -59,7 +59,7 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = ResumeNotFoundException.class)
     public void deleteNonExistent() {
-        storage.delete("nothing");
+        storage.delete(TEST_UUID);
     }
 
     @Test
@@ -70,7 +70,7 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = ResumeNotFoundException.class)
     public void updateNonExistent() {
-        storage.update(new Resume("nothing"));
+        storage.update(new Resume(TEST_UUID));
     }
 
     @Test
@@ -87,6 +87,8 @@ public abstract class AbstractStorageTest {
     @Test
     public void getAll() {
         Resume[] expectedResumes = new Resume[]{RESUME_1, RESUME_2, RESUME_3};
+        assertEquals(3, storage.size());
+        assertEquals(3, expectedResumes.length);
         assertArrayEquals(expectedResumes, storage.getAll());
     }
 

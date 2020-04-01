@@ -1,5 +1,6 @@
 package com.kgaisin.webapp.storage;
 
+import com.kgaisin.webapp.exception.ResumeNotFoundException;
 import com.kgaisin.webapp.model.Resume;
 
 import java.util.LinkedHashMap;
@@ -45,11 +46,20 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
+    protected Object checkIfResumeInStorage(String uuid) {
+        Object id = checkForResumePresence(uuid);
+        if (id.equals("Not found")) {
+            throw new ResumeNotFoundException(uuid);
+        }
+        return id;
+    }
+
+    @Override
     protected Object checkForResumePresence(String uuid) {
         Resume resume = new Resume(uuid);
         if(storage.containsValue(resume)) {
             return uuid;
         }
-        return -1;
+        return "Not found";
     }
 }
