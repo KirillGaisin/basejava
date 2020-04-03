@@ -1,32 +1,49 @@
 package com.kgaisin.webapp.storage;
 
 import com.kgaisin.webapp.exception.ResumeInStorageException;
+import com.kgaisin.webapp.exception.ResumeNotFoundException;
 import com.kgaisin.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
 
     public void save(Resume resume) {
-        Object id = checkForResumePresence(resume.getUuid());
-        if (id.equals(resume.getUuid()) || (int) id >= 0) {
-            throw new ResumeInStorageException(resume.getUuid());
+        String uuid = resume.getUuid();
+        Object id = checkForResumePresence(uuid);
+        if (checkId(uuid)) {
+            throw new ResumeInStorageException(uuid);
         }
 
         addResume(resume, id);
     }
 
     public void delete(String uuid) {
-        Object id = checkIfResumeInStorage(uuid);
+        if(!checkId(uuid)) {
+            throw new ResumeNotFoundException(uuid);
+        }
+        Object id = checkForResumePresence(uuid);
         removeResume(id);
     }
 
     public void update(Resume resume) {
-        Object id = checkIfResumeInStorage(resume.getUuid());
+        String uuid = resume.getUuid();
+        if(!checkId(uuid)) {
+            throw new ResumeNotFoundException(uuid);
+        }
+        Object id = checkForResumePresence(uuid);
         updateResume(resume, id);
     }
 
     public Resume get(String uuid) {
-        Object id = checkIfResumeInStorage(uuid);
+        if(!checkId(uuid)) {
+            throw new ResumeNotFoundException(uuid);
+        }
+        Object id = checkForResumePresence(uuid);
         return getResume(id);
+    }
+
+    protected boolean checkId(String uuid) {
+        int id = (int)checkForResumePresence(uuid);
+        return id >= 0;
     }
 
     protected abstract void addResume(Resume resume, Object id);
@@ -38,6 +55,4 @@ public abstract class AbstractStorage implements Storage {
     protected abstract Resume getResume(Object id);
 
     protected abstract Object checkForResumePresence(String uuid);
-
-    protected abstract Object checkIfResumeInStorage(String uuid);
 }

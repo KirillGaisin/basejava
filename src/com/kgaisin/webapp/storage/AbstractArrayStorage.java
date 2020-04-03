@@ -1,6 +1,5 @@
 package com.kgaisin.webapp.storage;
 
-import com.kgaisin.webapp.exception.ResumeNotFoundException;
 import com.kgaisin.webapp.exception.StorageException;
 import com.kgaisin.webapp.model.Resume;
 
@@ -49,15 +48,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     protected Resume getResume(Object id) {
         return storage[(Integer) id];
-    }
-
-    @Override
-    protected Object checkIfResumeInStorage(String uuid) {
-        int id = (int) checkForResumePresence(uuid);
-        if (id < 0) {
-            throw new ResumeNotFoundException(uuid);
-        }
-        return id;
     }
 
     public abstract void addResumeToArrayStorage(Resume resume, int id);
