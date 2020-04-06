@@ -56,10 +56,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void checkId(String uuid) {
+    protected boolean checkId(String uuid) {
         int id = (int)checkForResumePresence(uuid);
-        if(id < 0) {
-            throw new ResumeNotFoundException(uuid);
-        }
+        return id >= 0;
     }
 }

@@ -54,10 +54,8 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void checkId(String uuid) {
+    protected boolean checkId(String uuid) {
         String id = (String)checkForResumePresence(uuid);
-        if (!(id.compareTo(uuid) == 0)) {
-            throw new ResumeNotFoundException(uuid);
-        }
+        return id.compareTo(uuid) == 0;
     }
 }

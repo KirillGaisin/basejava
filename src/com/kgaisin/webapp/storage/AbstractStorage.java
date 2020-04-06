@@ -8,30 +8,40 @@ public abstract class AbstractStorage implements Storage {
 
     public void save(Resume resume) {
         String uuid = resume.getUuid();
-        Object id = checkForResumePresence(uuid);
-        try {
-            checkId(uuid);
-        } catch (ResumeNotFoundException notFound) {
-            addResume(resume, id);
-            return;
-        }
-        throw new ResumeInStorageException(uuid);
+        Object id = getNonExistentId(uuid);
+        addResume(resume, id);
     }
 
     public void delete(String uuid) {
-        Object id = checkForResumePresence(uuid);
+        Object id = getExistingId(uuid);
         removeResume(id);
     }
 
     public void update(Resume resume) {
         String uuid = resume.getUuid();
-        Object id = checkForResumePresence(uuid);
+        Object id = getExistingId(uuid);
         updateResume(resume, id);
     }
 
     public Resume get(String uuid) {
-        Object id = checkForResumePresence(uuid);
+        Object id = getExistingId(uuid);
         return getResume(id);
+    }
+
+    private Object getExistingId(String uuid) {
+        Object id = checkForResumePresence(uuid);
+        if (checkId(uuid)) {
+            return id;
+        }
+        throw new ResumeNotFoundException(uuid);
+    }
+
+    private Object getNonExistentId(String uuid) {
+        Object id = checkForResumePresence(uuid);
+        if (!checkId(uuid)) {
+            return id;
+        }
+        throw new ResumeInStorageException(uuid);
     }
 
     protected abstract void addResume(Resume resume, Object id);
@@ -44,5 +54,5 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract Object checkForResumePresence(String uuid);
 
-    protected abstract void checkId(String uuid);
+    protected abstract boolean checkId(String uuid);
 }

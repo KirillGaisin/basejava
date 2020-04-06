@@ -42,6 +42,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
+    protected boolean checkId(String uuid) {
+        int id = (int)checkForResumePresence(uuid);
+        return id >= 0;
+    }
+
+    @Override
     public void updateResume(Resume resume, Object id) {
         storage[(Integer) id] = resume;
     }
@@ -49,14 +55,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     protected Resume getResume(Object id) {
         return storage[(Integer) id];
-    }
-
-    @Override
-    protected void checkId(String uuid) {
-        int id = (int)checkForResumePresence(uuid);
-        if(id < 0) {
-            throw new ResumeNotFoundException(uuid);
-        }
     }
 
     public abstract void addElement(Resume resume, int id);
