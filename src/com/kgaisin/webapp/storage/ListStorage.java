@@ -1,6 +1,5 @@
 package com.kgaisin.webapp.storage;
 
-import com.kgaisin.webapp.exception.ResumeNotFoundException;
 import com.kgaisin.webapp.model.Resume;
 
 import java.util.ArrayList;
