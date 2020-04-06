@@ -1,5 +1,6 @@
 package com.kgaisin.webapp.storage;
 
+import com.kgaisin.webapp.exception.ResumeNotFoundException;
 import com.kgaisin.webapp.exception.StorageException;
 import com.kgaisin.webapp.model.Resume;
 
@@ -30,12 +31,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         if (size >= storage.length) {
             throw new StorageException("Resume storage is full", resume.getUuid());
         }
-        addResumeToArrayStorage(resume, (Integer) id);
+        addElement(resume, (Integer) id);
         size++;
     }
 
     public void removeResume(Object id) {
-        removeResumeFromArrayStorage((Integer) id);
+        removeElement((Integer) id);
         storage[size - 1] = null;
         size--;
     }
@@ -50,9 +51,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return storage[(Integer) id];
     }
 
-    public abstract void addResumeToArrayStorage(Resume resume, int id);
+    @Override
+    protected void checkId(String uuid) {
+        int id = (int)checkForResumePresence(uuid);
+        if(id < 0) {
+            throw new ResumeNotFoundException(uuid);
+        }
+    }
 
-    public abstract void removeResumeFromArrayStorage(int id);
+    public abstract void addElement(Resume resume, int id);
+
+    public abstract void removeElement(int id);
 
     protected abstract Object checkForResumePresence(String uuid);
 }

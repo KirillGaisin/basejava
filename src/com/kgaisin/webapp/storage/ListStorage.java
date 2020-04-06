@@ -1,5 +1,6 @@
 package com.kgaisin.webapp.storage;
 
+import com.kgaisin.webapp.exception.ResumeNotFoundException;
 import com.kgaisin.webapp.model.Resume;
 
 import java.util.ArrayList;
@@ -52,5 +53,13 @@ public class ListStorage extends AbstractStorage {
             }
         }
         return -1;
+    }
+
+    @Override
+    protected void checkId(String uuid) {
+        int id = (int)checkForResumePresence(uuid);
+        if(id < 0) {
+            throw new ResumeNotFoundException(uuid);
+        }
     }
 }

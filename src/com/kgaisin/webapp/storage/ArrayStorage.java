@@ -8,12 +8,12 @@ import com.kgaisin.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void addResumeToArrayStorage(Resume resume, int index) {
+    public void addElement(Resume resume, int index) {
         storage[size] = resume;
     }
 
     @Override
-    public void removeResumeFromArrayStorage(int index) {
+    public void removeElement(int index) {
         storage[index] = storage[size - 1];
     }
 

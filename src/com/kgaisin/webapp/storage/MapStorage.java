@@ -47,16 +47,17 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected Object checkForResumePresence(String uuid) {
-        Resume resume = new Resume(uuid);
-        if(storage.containsValue(resume)) {
+        if(storage.containsKey(uuid)) {
             return uuid;
         }
         return "Not found";
     }
 
     @Override
-    protected boolean checkId(String uuid) {
+    protected void checkId(String uuid) {
         String id = (String)checkForResumePresence(uuid);
-        return uuid.compareTo(id) == 0;
+        if (!(id.compareTo(uuid) == 0)) {
+            throw new ResumeNotFoundException(uuid);
+        }
     }
 }
