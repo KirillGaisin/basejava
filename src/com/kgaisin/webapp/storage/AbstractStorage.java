@@ -30,7 +30,7 @@ public abstract class AbstractStorage implements Storage {
 
     private Object getExistingId(String uuid) {
         Object id = checkForResumePresence(uuid);
-        if (checkId(uuid)) {
+        if (checkId(id)) {
             return id;
         }
         throw new ResumeNotFoundException(uuid);
@@ -38,7 +38,7 @@ public abstract class AbstractStorage implements Storage {
 
     private Object getNonExistentId(String uuid) {
         Object id = checkForResumePresence(uuid);
-        if (!checkId(uuid)) {
+        if (!checkId(id)) {
             return id;
         }
         throw new ResumeInStorageException(uuid);
@@ -54,5 +54,5 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract Object checkForResumePresence(String uuid);
 
-    protected abstract boolean checkId(String uuid);
+    protected abstract boolean checkId(Object id);
 }

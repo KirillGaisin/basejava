@@ -41,9 +41,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean checkId(String uuid) {
-        int id = (int)checkForResumePresence(uuid);
-        return id >= 0;
+    protected boolean checkId(Object id) {
+        return (int) id >= 0;
     }
 
     @Override
