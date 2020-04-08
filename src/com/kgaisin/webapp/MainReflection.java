@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 public class MainReflection {
 
     public static void main(String[] args) throws Exception {
-        Resume r = new Resume();
+        Resume r = new Resume("Boris");
         Field field = r.getClass().getDeclaredFields()[0];
         field.setAccessible(true);
         System.out.println(field.getName());

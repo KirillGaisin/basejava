@@ -3,15 +3,16 @@ package com.kgaisin.webapp.storage;
 import com.kgaisin.webapp.model.Resume;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-public class ListStorage extends AbstractStorage {
-
-    private List<Resume> storage = new ArrayList<>();
+public class MapUuidStorage extends AbstractStorage {
+    private Map<String, Resume> storage = new LinkedHashMap<>();
 
     @Override
     public List<Resume> getAllSorted() {
-        return storage;
+        return new ArrayList<>(storage.values());
     }
 
     @Override
@@ -25,37 +26,33 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume getResume(Object id) {
-        return storage.get((int) id);
-    }
-
-    @Override
     protected void addResume(Resume resume, Object id) {
-        storage.add(resume);
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override
     protected void removeResume(Object id) {
-        storage.remove((int) id);
+        storage.remove(id.toString());
     }
 
     @Override
     protected void updateResume(Resume resume, Object id) {
-        storage.set((int) id, resume);
+        storage.replace(id.toString(), resume);
     }
 
     @Override
-    protected Integer checkForResumePresence(String uuid) {
-        for (int i = 0; i < storage.size(); i++) {
-            if (storage.get(i).getUuid().compareTo(uuid) == 0) {
-                return i;
-            }
-        }
-        return -1;
+    protected Resume getResume(Object id) {
+        return storage.get(id.toString());
+    }
+
+    @Override
+    protected String checkForResumePresence(String uuid) {
+        return uuid;
     }
 
     @Override
     protected boolean checkId(Object id) {
-        return (int) id >= 0;
+        return storage.containsKey((String) id);
     }
+
 }
