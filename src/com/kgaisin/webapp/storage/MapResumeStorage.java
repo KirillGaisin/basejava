@@ -2,9 +2,12 @@ package com.kgaisin.webapp.storage;
 
 import com.kgaisin.webapp.model.Resume;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-public class MapStorage extends AbstractStorage {
+public class MapResumeStorage extends AbstractStorage {
     private Map<String, Resume> storage = new LinkedHashMap<>();
 
     @Override
@@ -14,7 +17,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected void removeResume(Object id) {
-        storage.entrySet().removeIf(entry -> entry.getValue().getFullName().equals(id));
+        storage.entrySet().removeIf(entry -> entry.getValue().equals(id));
     }
 
     @Override
@@ -24,12 +27,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected Resume getResume(Object id) {
-        for (Map.Entry<String, Resume> entry : storage.entrySet()) {
-            if (entry.getValue().getFullName().equals(id)) {
-                return entry.getValue();
-            }
-        }
-        return null;
+        return (Resume)id;
     }
 
     @Override
@@ -48,17 +46,13 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected String checkForResumePresence(String uuid) {
-        if (Objects.isNull(storage.get(uuid))) {
-            return "Not found";
-        }
-        Resume searchKey = storage.get(uuid);
-        return searchKey.getFullName();
+    protected Resume checkForResumePresence(String uuid) {
+        return storage.get(uuid);
     }
 
     @Override
     protected boolean checkId(Object id) {
-        return !id.equals("Not found");
+        return storage.containsValue((Resume)id);
     }
 
 }

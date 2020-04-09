@@ -1,4 +1,4 @@
-package com.kgaisin.webapp.storage;
+package com.kgaisin.webapp;
 
 public class MainUtil {
     public static void main(String[] args) {

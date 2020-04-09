@@ -47,7 +47,7 @@ public class ListStorage extends AbstractStorage {
     @Override
     protected Integer checkForResumePresence(String uuid) {
         for (int i = 0; i < storage.size(); i++) {
-            if (storage.get(i).getUuid().compareTo(uuid) == 0) {
+            if (storage.get(i).getUuid().equals(uuid)) {
                 return i;
             }
         }
