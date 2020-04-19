@@ -1,5 +1,7 @@
 package com.kgaisin.webapp.model;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -11,6 +13,9 @@ public class Resume implements Comparable<Resume> {
     // Unique identifier
     private final String uuid;
     private final String fullName;
+
+    private Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
+    private Map<ContactType, Contact> contacts = new EnumMap<>(ContactType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -27,6 +32,22 @@ public class Resume implements Comparable<Resume> {
 
     public String getFullName() {
         return fullName;
+    }
+
+    public void setContacts(Map<ContactType, Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+    public void setSections(Map<SectionType, Section> sections) {
+        this.sections = sections;
+    }
+
+    public Map<SectionType, Section> getSections() {
+        return sections;
+    }
+
+    public Map<ContactType, Contact> getContacts() {
+        return contacts;
     }
 
     @Override

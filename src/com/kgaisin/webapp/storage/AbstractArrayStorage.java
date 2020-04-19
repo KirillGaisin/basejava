@@ -6,7 +6,7 @@ import com.kgaisin.webapp.model.Resume;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 4;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
@@ -27,38 +27,38 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return size;
     }
 
-    public void addResume(Resume resume, Object id) {
+    public void addResume(Resume resume, Integer id) {
         if (size >= storage.length) {
             throw new StorageException("Resume storage is full", resume.getUuid());
         }
-        addElement(resume, (Integer) id);
+        addElement(resume, id);
         size++;
     }
 
-    public void removeResume(Object id) {
-        removeElement((Integer) id);
+    public void removeResume(Integer id) {
+        removeElement(id);
         storage[size - 1] = null;
         size--;
     }
 
     @Override
-    protected boolean checkId(Object id) {
-        return (int) id >= 0;
+    protected boolean checkId(Integer id) {
+        return id >= 0;
     }
 
     @Override
-    public void updateResume(Resume resume, Object id) {
-        storage[(Integer) id] = resume;
+    public void updateResume(Resume resume, Integer id) {
+        storage[id] = resume;
     }
 
     @Override
-    protected Resume getResume(Object id) {
-        return storage[(Integer) id];
+    protected Resume getResume(Integer id) {
+        return storage[id];
     }
 
     public abstract void addElement(Resume resume, int id);
 
     public abstract void removeElement(int id);
 
-    protected abstract Object checkForResumePresence(String uuid);
+    protected abstract Integer checkForResumePresence(String uuid);
 }

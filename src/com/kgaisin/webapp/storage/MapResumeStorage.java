@@ -7,27 +7,27 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapResumeStorage extends AbstractStorage {
+public class MapResumeStorage extends AbstractStorage<Resume> {
     private Map<String, Resume> storage = new LinkedHashMap<>();
 
     @Override
-    protected void addResume(Resume resume, Object id) {
+    protected void addResume(Resume resume, Resume id) {
         storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected void removeResume(Object id) {
-        storage.entrySet().removeIf(entry -> entry.getValue().equals(id));
+    protected void removeResume(Resume id) {
+        storage.remove(id.getUuid());
     }
 
     @Override
-    protected void updateResume(Resume resume, Object id) {
+    protected void updateResume(Resume resume, Resume id) {
         storage.replace(resume.getUuid(), resume);
     }
 
     @Override
-    protected Resume getResume(Object id) {
-        return (Resume)id;
+    protected Resume getResume(Resume id) {
+        return id;
     }
 
     @Override
@@ -51,8 +51,7 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean checkId(Object id) {
-        return storage.containsValue((Resume)id);
+    protected boolean checkId(Resume id) {
+        return id != null;
     }
-
 }

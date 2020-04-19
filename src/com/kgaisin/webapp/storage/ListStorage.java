@@ -5,7 +5,7 @@ import com.kgaisin.webapp.model.Resume;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage<Integer> {
 
     private List<Resume> storage = new ArrayList<>();
 
@@ -25,23 +25,23 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume getResume(Object id) {
-        return storage.get((int) id);
+    public Resume getResume(Integer id) {
+        return storage.get(id);
     }
 
     @Override
-    protected void addResume(Resume resume, Object id) {
+    protected void addResume(Resume resume, Integer id) {
         storage.add(resume);
     }
 
     @Override
-    protected void removeResume(Object id) {
-        storage.remove((int) id);
+    protected void removeResume(Integer id) {
+        storage.remove(id.intValue());
     }
 
     @Override
-    protected void updateResume(Resume resume, Object id) {
-        storage.set((int) id, resume);
+    protected void updateResume(Resume resume, Integer id) {
+        storage.set(id, resume);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean checkId(Object id) {
-        return (int) id >= 0;
+    protected boolean checkId(Integer id) {
+        return  id >= 0;
     }
 }
