@@ -2,21 +2,15 @@ package com.kgaisin.webapp.model;
 
 import java.time.YearMonth;
 
-public class Occupation {
-    private Link occupationProvider;
+public class Period {
     private YearMonth dateSince;
     private YearMonth dateUntil;
     private TextSection description;
 
-    public Occupation(Link occupationProvider, YearMonth dateSince, YearMonth dateUntil, TextSection description) {
-        this.occupationProvider = occupationProvider;
+    public Period(YearMonth dateSince, YearMonth dateUntil, TextSection description) {
         this.dateSince = dateSince;
         this.dateUntil = dateUntil;
         this.description = description;
-    }
-
-    public Link getOccupationProvider() {
-        return occupationProvider;
     }
 
     public YearMonth getDateSince() {
@@ -33,11 +27,10 @@ public class Occupation {
 
     @Override
     public String toString() {
-        return "Occupation{" +
-                "occupationProvider=" + occupationProvider +
-                ", dateSince=" + dateSince +
+        return "Period{" +
+                "dateSince=" + dateSince +
                 ", dateUntil=" + dateUntil +
-                ", description=" + description +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

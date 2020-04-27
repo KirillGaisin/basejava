@@ -1,22 +1,22 @@
 package com.kgaisin.webapp.model;
 
 public class Contact {
-    private Link linkContact;
-    private String stringContact;
+    private Link link;
+    private String text;
 
-    public Contact(Link linkContact) {
-        this.linkContact = linkContact;
+    public Contact(Link link) {
+        this.link = link;
     }
 
-    public Contact(String stringContact) {
-        this.stringContact = stringContact;
+    public Contact(String text) {
+        this.text = text;
     }
 
     @Override
     public String toString() {
         return "Contact{" +
-                "linkContact=" + linkContact +
-                ", stringContact='" + stringContact + '\'' +
+                "link=" + link +
+                ", text='" + text + '\'' +
                 '}';
     }
 }

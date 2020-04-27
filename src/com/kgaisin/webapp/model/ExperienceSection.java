@@ -2,21 +2,21 @@ package com.kgaisin.webapp.model;
 
 import java.util.List;
 
-public class ExperienceSection extends Section {
-    private List<Occupation> pastOccupations;
+public class ExperienceSection extends AbstractSection {
+    private List<Position> pastPositions;
 
-    public ExperienceSection(List<Occupation> pastOccupations) {
-        this.pastOccupations = pastOccupations;
+    public ExperienceSection(List<Position> pastPositions) {
+        this.pastPositions = pastPositions;
     }
 
-    public List<Occupation> getPastOccupations() {
-        return pastOccupations;
+    public List<Position> getPastPositions() {
+        return pastPositions;
     }
 
     @Override
     public String toString() {
         return "ExperienceSection{" +
-                "pastOccupations=" + pastOccupations +
+                "pastPositions=" + pastPositions +
                 '}';
     }
 }

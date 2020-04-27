@@ -1,6 +1,6 @@
 package com.kgaisin.webapp.model;
 
-public class TextSection extends Section {
+public class TextSection extends AbstractSection {
     private String header;
     private String content;
 
