@@ -68,10 +68,13 @@ public class Resume implements Comparable<Resume> {
 
     @Override
     public String toString() {
-        return "Resume{" +
-                "uuid='" + uuid + '\'' +
-                ", fullName='" + fullName + '\'' +
-                '}';
+        final StringBuffer sb = new StringBuffer("Resume{");
+        sb.append("uuid='").append(uuid).append('\'');
+        sb.append(", fullName='").append(fullName).append('\'');
+        sb.append(", sections=").append(sections);
+        sb.append(", contacts=").append(contacts);
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override

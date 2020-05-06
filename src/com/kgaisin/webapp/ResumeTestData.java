@@ -130,8 +130,12 @@ public class ResumeTestData {
         Resume resume = new Resume(fullName);
 
         LOG.info(resume.toString());
-        LOG.info(resume.getContacts().toString());
-        LOG.info(resume.getSections().toString());
+        for (Contact contact : contacts.values()) {
+            LOG.info(contact.toString());
+        }
+        for (AbstractSection section : sections.values()) {
+            LOG.info(section.toString());
+        }
     }
 
     public static Resume addData(String uuid, String fullName) {

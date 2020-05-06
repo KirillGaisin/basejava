@@ -86,6 +86,11 @@ public abstract class AbstractStorageTest {
         assertEquals(RESUME_1, storage.get(UUID_1));
     }
 
+    @Test(expected = ResumeNotFoundException.class)
+    public void getNonExistent() {
+        assertEquals(TEST_RESUME, storage.get(TEST_UUID));
+    }
+
     @Test
     public void clear() {
         storage.clear();
