@@ -1,6 +1,7 @@
 package com.kgaisin.webapp.model;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Position {
     private Link link;
@@ -17,6 +18,22 @@ public class Position {
 
     public Period[] getPeriod() {
         return period;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Position position = (Position) o;
+        return link.equals(position.link) &&
+                Arrays.equals(period, position.period);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(link);
+        result = 31 * result + Arrays.hashCode(period);
+        return result;
     }
 
     @Override

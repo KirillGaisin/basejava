@@ -1,6 +1,7 @@
 package com.kgaisin.webapp.model;
 
 import java.time.YearMonth;
+import java.util.Objects;
 
 public class Period {
     private YearMonth dateSince;
@@ -23,6 +24,21 @@ public class Period {
 
     public TextSection getDescription() {
         return description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Period period = (Period) o;
+        return dateSince.equals(period.dateSince) &&
+                dateUntil.equals(period.dateUntil) &&
+                description.equals(period.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dateSince, dateUntil, description);
     }
 
     @Override

@@ -18,16 +18,12 @@ public abstract class AbstractStorageTest {
     Storage storage;
 
     private static final String UUID_1 = "uuid1";
-    //private static final Resume RESUME_1 = new Resume(UUID_1, "Name1");
     private static final Resume RESUME_1 = addData(UUID_1, "Name1");
     private static final String UUID_2 = "uuid2";
-    //private static final Resume RESUME_2 = new Resume(UUID_2, "Name2");
     private static final Resume RESUME_2 = addData(UUID_2, "Name2");
     private static final String UUID_3 = "uuid3";
-    //private static final Resume RESUME_3 = new Resume(UUID_3, "Name3");
     private static final Resume RESUME_3 = addData(UUID_3, "Name3");
     private static final String TEST_UUID = "test_uuid";
-    //private static final Resume TEST_RESUME = new Resume(TEST_UUID, "Test_name");
     private static final Resume TEST_RESUME = addData(TEST_UUID, "Test_name");
 
     AbstractStorageTest(Storage storage) {
@@ -35,7 +31,7 @@ public abstract class AbstractStorageTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         storage.clear();
         storage.save(RESUME_1);
         storage.save(RESUME_2);
@@ -43,7 +39,7 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void save() throws Exception {
+    public void save() {
         storage.save(TEST_RESUME);
         assertEquals(4, storage.size());
         assertEquals(TEST_RESUME, storage.get(TEST_UUID));

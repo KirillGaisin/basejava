@@ -1,5 +1,7 @@
 package com.kgaisin.webapp.model;
 
+import java.util.Objects;
+
 public class TextSection extends AbstractSection {
     private String header;
     private String content;
@@ -19,6 +21,20 @@ public class TextSection extends AbstractSection {
 
     public String getContent() {
         return content;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TextSection that = (TextSection) o;
+        return header.equals(that.header) &&
+                content.equals(that.content);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(header, content);
     }
 
     @Override
