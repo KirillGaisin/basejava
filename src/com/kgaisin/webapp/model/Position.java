@@ -1,9 +1,10 @@
 package com.kgaisin.webapp.model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Position {
+public class Position implements Serializable {
     private Link link;
     private Period[] period;
 

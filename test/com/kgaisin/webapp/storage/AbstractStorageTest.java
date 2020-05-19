@@ -7,6 +7,7 @@ import com.kgaisin.webapp.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,6 +17,8 @@ import static com.kgaisin.webapp.ResumeTestData.*;
 
 public abstract class AbstractStorageTest {
     Storage storage;
+
+    protected static final File DIR = new File("storage");
 
     private static final String UUID_1 = "uuid1";
     private static final Resume RESUME_1 = addData(UUID_1, "Name1");
