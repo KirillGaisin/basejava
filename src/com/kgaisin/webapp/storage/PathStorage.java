@@ -2,7 +2,7 @@ package com.kgaisin.webapp.storage;
 
 import com.kgaisin.webapp.exception.StorageException;
 import com.kgaisin.webapp.model.Resume;
-import com.kgaisin.webapp.util.Serializer.StreamSerializer;
+import com.kgaisin.webapp.util.serializer.StreamSerializer;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private Path directory;
@@ -31,20 +31,12 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::removeResume);
-        } catch (IOException e) {
-            throw new StorageException("Error while deleting dir");
-        }
+        getPaths().forEach(this::removeResume);
     }
 
     @Override
     public int size() {
-        try {
-            return (int)Files.list(directory).count();
-        } catch (IOException e) {
-            throw new StorageException("Error while getting size of dir");
-        }
+        return (int) getPaths().count();
     }
 
     @Override
@@ -63,17 +55,17 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected boolean checkId(Path path) {
-        return path.toFile().exists();
+        return Files.exists(path);
     }
 
     @Override
     protected void addResume(Resume r, Path path) {
         try {
             Files.createFile(path);
-            streamSerializer.doWrite(r, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Couldn't create path " + path, path.toString(), e);
         }
+        updateResume(r, path);
     }
 
     @Override
@@ -96,13 +88,14 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public List<Resume> getAllSorted() {
+        return getPaths().map(this::getResume).collect(Collectors.toList());
+    }
+
+    private Stream<Path> getPaths() {
         try {
-            List<Path> paths = Files.list(directory).collect(Collectors.toList());
-            List<Resume> resumes = new ArrayList<>();
-            paths.forEach(path -> resumes.add(getResume(path)));
-            return resumes;
+            return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException("Error while getting sorted resumes", e);
+            throw new StorageException("Error while getting paths");
         }
     }
 }

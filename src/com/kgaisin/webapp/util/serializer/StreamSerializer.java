@@ -1,4 +1,4 @@
-package com.kgaisin.webapp.util.Serializer;
+package com.kgaisin.webapp.util.serializer;
 
 import com.kgaisin.webapp.model.Resume;
 

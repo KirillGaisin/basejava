@@ -33,19 +33,19 @@ public class MainFile {
             throw new RuntimeException(e);
         }
 
-        showDirs("./src");
+        showDirs("./src", "");
     }
 
-    public static void showDirs(String filePath) {
+    public static void showDirs(String filePath, String offset) {
         File dir = new File(filePath);
         List<File> filesInDir = Arrays.asList(Objects.requireNonNull(dir.listFiles()));
 
         filesInDir.forEach(file -> {
             if(file.isDirectory()) {
-                showDirs(file.getAbsolutePath());
-                System.out.println("Dir: " + file);
+                System.out.println(offset + "Dir: " + file);
+                showDirs(file.getAbsolutePath(), offset + " ");
             } else {
-                System.out.println("File: " + file);
+                System.out.println(offset + "File: " + file);
             }
         });
     }

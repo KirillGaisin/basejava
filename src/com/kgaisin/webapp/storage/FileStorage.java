@@ -2,12 +2,14 @@ package com.kgaisin.webapp.storage;
 
 import com.kgaisin.webapp.exception.StorageException;
 import com.kgaisin.webapp.model.Resume;
-import com.kgaisin.webapp.util.Serializer.StreamSerializer;
+import com.kgaisin.webapp.util.serializer.StreamSerializer;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class FileStorage extends AbstractStorage<File> {
     private File directory;
@@ -28,23 +30,12 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (!file.delete()) {
-                    throw new StorageException("File not deleted", file.getName());
-                }
-            }
-        }
+        getFiles().forEach(this::removeResume);
     }
 
     @Override
     public int size() {
-        if (directory.listFiles() == null) {
-            return 0;
-        } else {
-            return directory.listFiles().length;
-        }
+        return getFiles().size();
     }
 
     @Override
@@ -54,8 +45,10 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected void updateResume(Resume r, File file) {
-        if(directory.getName().equals(r.getUuid())) {
-            directory = file;
+        try {
+            streamSerializer.doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
+        } catch (IOException e) {
+            throw new StorageException("Error while writing into file", file.getName(), e);
         }
     }
 
@@ -68,10 +61,10 @@ public class FileStorage extends AbstractStorage<File> {
     protected void addResume(Resume r, File file) {
         try {
             file.createNewFile();
-            streamSerializer.doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+            throw new StorageException("Error while creating file", file.getName(), e);
         }
+        updateResume(r, file);
     }
 
     @Override
@@ -92,11 +85,13 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public List<Resume> getAllSorted() {
-        File[] files = directory.listFiles();
-        List<Resume> resumes = new ArrayList<>();
-        for (File file : files) {
-            resumes.add(getResume(file));
+        return getFiles().stream().map(this::getResume).collect(Collectors.toList());
+    }
+
+    private List<File> getFiles() {
+        if(directory.listFiles() == null) {
+            throw new StorageException("Directory is null");
         }
-        return resumes;
+        return Arrays.asList(Objects.requireNonNull(directory.listFiles()));
     }
 }
