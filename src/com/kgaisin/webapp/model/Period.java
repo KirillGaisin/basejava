@@ -1,27 +1,38 @@
 package com.kgaisin.webapp.model;
 
+import com.kgaisin.webapp.util.LocalDateAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
-import java.time.YearMonth;
+import java.time.LocalDate;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Period implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private YearMonth dateSince;
-    private YearMonth dateUntil;
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    private LocalDate dateSince;
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    private LocalDate dateUntil;
     private TextSection description;
 
-    public Period(YearMonth dateSince, YearMonth dateUntil, TextSection description) {
+    public Period() {
+    }
+
+    public Period(LocalDate dateSince, LocalDate dateUntil, TextSection description) {
         this.dateSince = dateSince;
         this.dateUntil = dateUntil;
         this.description = description;
     }
 
-    public YearMonth getDateSince() {
+    public LocalDate getDateSince() {
         return dateSince;
     }
 
-    public YearMonth getDateUntil() {
+    public LocalDate getDateUntil() {
         return dateUntil;
     }
 

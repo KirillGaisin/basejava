@@ -1,12 +1,18 @@
 package com.kgaisin.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.util.List;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ExperienceSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
 
     private List<Position> pastPositions;
+
+    public ExperienceSection() {
+    }
 
     public ExperienceSection(List<Position> pastPositions) {
         this.pastPositions = pastPositions;
