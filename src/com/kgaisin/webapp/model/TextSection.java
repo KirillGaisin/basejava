@@ -16,11 +16,7 @@ public class TextSection extends AbstractSection {
 
     public TextSection(String header, String content) {
         this.header = header;
-        this.content = content;
-    }
-
-    public TextSection(String header) {
-        this.header = header;
+        this.content = content == null ? "" : content;
     }
 
     public String getHeader() {

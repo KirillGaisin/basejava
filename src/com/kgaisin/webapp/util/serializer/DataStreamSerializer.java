@@ -4,11 +4,8 @@ import com.kgaisin.webapp.exception.StorageException;
 import com.kgaisin.webapp.model.*;
 
 import java.io.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.time.YearMonth;
+import java.util.*;
 
 public class DataStreamSerializer implements StreamSerializer {
 
@@ -19,7 +16,6 @@ public class DataStreamSerializer implements StreamSerializer {
             dos.writeUTF(r.getFullName());
             writeSection(dos, r.getContacts().entrySet(), contacts -> {
                 dos.writeUTF(contacts.getKey().name());
-                dos.writeUTF(contacts.getValue().toString());
                 if (contacts.getKey() == ContactType.MOBILE_PHONE || contacts.getKey() == ContactType.HOME_PHONE) {
                     dos.writeUTF(contacts.getValue().getName());
                 } else {
@@ -34,6 +30,7 @@ public class DataStreamSerializer implements StreamSerializer {
                 switch (sectionName) {
                     case PERSONAL:
                     case OBJECTIVE:
+                        dos.writeUTF(((TextSection) section).getHeader());
                         dos.writeUTF(((TextSection) section).getContent());
                         break;
                     case ACHIEVEMENT:
@@ -45,7 +42,7 @@ public class DataStreamSerializer implements StreamSerializer {
                         writeSection(dos, ((ExperienceSection) section).getPastPositions(), pos -> {
                             dos.writeUTF(pos.getLink().getName());
                             dos.writeUTF(pos.getLink().getUrl());
-                            writeSection(dos, Arrays.asList(pos.getPeriod()), period -> {
+                            writeSection(dos, pos.getPeriod(), period -> {
                                 writeDate(dos, period.getDateSince());
                                 writeDate(dos, period.getDateUntil());
                                 dos.writeUTF(period.getDescription().getHeader());
@@ -63,20 +60,18 @@ public class DataStreamSerializer implements StreamSerializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            int size = dis.readInt();
-            ContactType contactType = ContactType.valueOf(dis.readUTF());
-            for (int i = 0; i < size; i++) {
+            readEntries(dis, () -> {
+                ContactType contactType = ContactType.valueOf(dis.readUTF());
                 if (contactType == ContactType.MOBILE_PHONE || contactType == ContactType.HOME_PHONE) {
-                    resume.addContact(contactType, new Link(dis.readUTF(), null));
+                    resume.addContact(contactType, new Link(dis.readUTF(), ""));
                 } else {
                     resume.addContact(contactType, new Link(dis.readUTF(), dis.readUTF()));
                 }
-            }
-            int sectionSize = dis.readInt();
-            SectionType sectionType = SectionType.valueOf(dis.readUTF());
-            for (int i = 0; i < sectionSize; i++) {
+            });
+            readEntries(dis, () -> {
+                SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 resume.addSection(sectionType, readSection(dis, sectionType));
-            }
+            });
             return resume;
         }
     }
@@ -92,7 +87,7 @@ public class DataStreamSerializer implements StreamSerializer {
         switch (section) {
             case PERSONAL:
             case OBJECTIVE:
-                return new TextSection(dis.readUTF());
+                return new TextSection(dis.readUTF(), dis.readUTF());
             case ACHIEVEMENT:
             case QUALIFICATIONS:
                 return new ListSection(readList(dis, dis::readUTF));
@@ -100,7 +95,7 @@ public class DataStreamSerializer implements StreamSerializer {
             case EDUCATION:
                 return new ExperienceSection(readList(dis, () -> new Position(
                         new Link(dis.readUTF(), dis.readUTF()),
-                        new Period(readDate(dis), readDate(dis), new TextSection(dis.readUTF()))
+                        new Period(readDate(dis), readDate(dis), new TextSection(dis.readUTF(), dis.readUTF()))
                 )));
             default:
                 throw new StorageException("Nonexistent section");
@@ -109,20 +104,27 @@ public class DataStreamSerializer implements StreamSerializer {
 
     private <T> List<T> readList(DataInputStream dis, ElementReader<T> reader) throws IOException {
         int size = dis.readInt();
-        List<T> list = new ArrayList<>();
+        List<T> list = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             list.add(reader.read());
         }
         return list;
     }
 
-    private void writeDate(DataOutputStream dos, LocalDate date) throws IOException {
+    private void readEntries(DataInputStream dis, EntryReader reader) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            reader.readEntry();
+        }
+    }
+
+    private void writeDate(DataOutputStream dos, YearMonth date) throws IOException {
         dos.writeInt(date.getYear());
         dos.writeInt(date.getMonth().getValue());
     }
 
-    private LocalDate readDate(DataInputStream dis) throws IOException {
-        return LocalDate.ofYearDay(dis.readInt(), dis.readInt());
+    private YearMonth readDate(DataInputStream dis) throws IOException {
+        return YearMonth.of(dis.readInt(), dis.readInt());
     }
 
     private interface ElementWriter<T> {
@@ -131,5 +133,9 @@ public class DataStreamSerializer implements StreamSerializer {
 
     private interface ElementReader<T> {
         T read() throws IOException;
+    }
+
+    private interface EntryReader {
+        void readEntry() throws IOException;
     }
 }
