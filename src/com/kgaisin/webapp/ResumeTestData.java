@@ -156,6 +156,13 @@ public class ResumeTestData {
                         YearMonth.now(),
                         new TextSection(testHeader,
                                 testData)));
+        Position testPositionWithMultiplePeriods = new Position(new Link(testHeader, testUrl),
+                new Period(YearMonth.of(1900, testDataNum),
+                        YearMonth.now(),
+                        new TextSection(testHeader, testData)),
+                new Period(YearMonth.of(1900, testDataNum),
+                        YearMonth.now(),
+                        new TextSection(testHeader, testData)));
 
         List<Position> testJobs = new ArrayList<>();
         List<Position> testEducation = new ArrayList<>();
@@ -164,6 +171,7 @@ public class ResumeTestData {
             testEducation.add(testPosition);
             testDataNum++;
         }
+        testEducation.add(testPositionWithMultiplePeriods);
 
         contacts.put(ContactType.MOBILE_PHONE, new Link(testData, ""));
         contacts.put(ContactType.HOME_PHONE, new Link(testData, ""));
