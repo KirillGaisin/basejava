@@ -9,17 +9,17 @@ import java.util.Objects;
 public class ExperienceSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
 
-    private List<Position> pastPositions;
+    private List<Organization> organizations;
 
     public ExperienceSection() {
     }
 
-    public ExperienceSection(List<Position> pastPositions) {
-        this.pastPositions = pastPositions;
+    public ExperienceSection(List<Organization> organizations) {
+        this.organizations = organizations;
     }
 
-    public List<Position> getPastPositions() {
-        return pastPositions;
+    public List<Organization> getOrganizations() {
+        return organizations;
     }
 
     @Override
@@ -27,18 +27,18 @@ public class ExperienceSection extends AbstractSection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ExperienceSection that = (ExperienceSection) o;
-        return pastPositions.equals(that.pastPositions);
+        return organizations.equals(that.organizations);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pastPositions);
+        return Objects.hash(organizations);
     }
 
     @Override
     public String toString() {
         return "ExperienceSection{" +
-                "pastPositions=" + pastPositions +
+                "organizations=" + organizations +
                 '}';
     }
 }

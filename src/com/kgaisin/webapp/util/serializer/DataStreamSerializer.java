@@ -5,7 +5,9 @@ import com.kgaisin.webapp.model.*;
 
 import java.io.*;
 import java.time.YearMonth;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class DataStreamSerializer implements StreamSerializer {
 
@@ -39,14 +41,14 @@ public class DataStreamSerializer implements StreamSerializer {
                         break;
                     case EDUCATION:
                     case EXPERIENCE:
-                        writeSection(dos, ((ExperienceSection) section).getPastPositions(), pos -> {
-                            dos.writeUTF(pos.getLink().getName());
-                            dos.writeUTF(pos.getLink().getUrl());
-                            writeSection(dos, pos.getPeriod(), period -> {
-                                writeDate(dos, period.getDateSince());
-                                writeDate(dos, period.getDateUntil());
-                                dos.writeUTF(period.getDescription().getHeader());
-                                dos.writeUTF(period.getDescription().getContent());
+                        writeSection(dos, ((ExperienceSection) section).getOrganizations(), org -> {
+                            dos.writeUTF(org.getLink().getName());
+                            dos.writeUTF(org.getLink().getUrl());
+                            writeSection(dos, org.getPositions(), pos -> {
+                                writeDate(dos, pos.getDateSince());
+                                writeDate(dos, pos.getDateUntil());
+                                dos.writeUTF(pos.getHeader());
+                                dos.writeUTF(pos.getDescription());
                             });
                         });
                 }
@@ -93,9 +95,9 @@ public class DataStreamSerializer implements StreamSerializer {
                 return new ListSection(readList(dis, dis::readUTF));
             case EXPERIENCE:
             case EDUCATION:
-                return new ExperienceSection(readList(dis, () -> new Position(
+                return new ExperienceSection(readList(dis, () -> new Organization(
                         new Link(dis.readUTF(), dis.readUTF()),
-                        new Period(readDate(dis), readDate(dis), new TextSection(dis.readUTF(), dis.readUTF()))
+                        readList(dis, () -> new Position(readDate(dis), readDate(dis), dis.readUTF(), dis.readUTF()))
                 )));
             default:
                 throw new StorageException("Nonexistent section");

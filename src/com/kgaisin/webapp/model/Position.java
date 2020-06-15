@@ -1,31 +1,49 @@
 package com.kgaisin.webapp.model;
 
+import com.kgaisin.webapp.util.YearMonthAdapter;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
+import java.time.YearMonth;
 import java.util.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Position implements Serializable {
-    private Link link;
-    private List<Period> period;
+    private static final long serialVersionUID = 1L;
+
+    @XmlJavaTypeAdapter(YearMonthAdapter.class)
+    private YearMonth dateSince;
+    @XmlJavaTypeAdapter(YearMonthAdapter.class)
+    private YearMonth dateUntil;
+    private String header;
+    private String description;
 
     public Position() {
     }
 
-    public Position(Link link, Period... period) {
-        this.link = link;
-        this.period = Arrays.asList(period);
+    public Position(YearMonth dateSince, YearMonth dateUntil, String header, String description) {
+        this.dateSince = dateSince;
+        this.dateUntil = dateUntil;
+        this.header = header;
+        this.description = description == null ? "" : description;
     }
 
-    public Link getLink() {
-        return link;
+    public YearMonth getDateSince() {
+        return dateSince;
     }
 
-    public List<Period> getPeriod() {
-        return period;
+    public YearMonth getDateUntil() {
+        return dateUntil;
+    }
+
+    public String getHeader() {
+        return header;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     @Override
@@ -33,20 +51,24 @@ public class Position implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Position position = (Position) o;
-        return Objects.equals(link, position.link) &&
-                Objects.equals(period, position.period);
+        return Objects.equals(dateSince, position.dateSince) &&
+                Objects.equals(dateUntil, position.dateUntil) &&
+                Objects.equals(header, position.header) &&
+                Objects.equals(description, position.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(link, period);
+        return Objects.hash(dateSince, dateUntil, header, description);
     }
 
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("Position{");
-        sb.append("link=").append(link);
-        sb.append(", period=").append(period);
+        sb.append("dateSince=").append(dateSince);
+        sb.append(", dateUntil=").append(dateUntil);
+        sb.append(", header='").append(header).append('\'');
+        sb.append(", description='").append(description).append('\'');
         sb.append('}');
         return sb.toString();
     }
