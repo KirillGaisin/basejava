@@ -118,10 +118,8 @@ public class ResumeTestData {
         contacts.put(ContactType.STACKOVERFLOW, new Link("Профиль Stackoverflow", "https://stackoverflow.com/users/548473"));
         contacts.put(ContactType.HOMEPAGE, new Link("Домашняя страница", "http://gkislin.ru/"));
 
-        sections.put(SectionType.OBJECTIVE, new TextSection("Позиция",
-                "Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
-        sections.put(SectionType.PERSONAL, new TextSection("Личные качества",
-                "Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
+        sections.put(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
+        sections.put(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
         sections.put(SectionType.ACHIEVEMENT, new ListSection(achievements));
         sections.put(SectionType.QUALIFICATIONS, new ListSection(qualifications));
         sections.put(SectionType.EXPERIENCE, new ExperienceSection(jobs));
@@ -182,10 +180,8 @@ public class ResumeTestData {
             }
         }
 
-        sections.put(SectionType.OBJECTIVE, new TextSection(testHeader,
-                testData));
-        sections.put(SectionType.PERSONAL, new TextSection(testHeader,
-                testData));
+        sections.put(SectionType.OBJECTIVE, new TextSection(testData));
+        sections.put(SectionType.PERSONAL, new TextSection(testData));
         sections.put(SectionType.ACHIEVEMENT, new ListSection(testAchievements));
         sections.put(SectionType.QUALIFICATIONS, new ListSection(testQualifications));
         sections.put(SectionType.EXPERIENCE, new ExperienceSection(testJobs));

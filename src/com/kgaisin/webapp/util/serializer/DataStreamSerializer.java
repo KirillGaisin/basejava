@@ -32,7 +32,6 @@ public class DataStreamSerializer implements StreamSerializer {
                 switch (sectionName) {
                     case PERSONAL:
                     case OBJECTIVE:
-                        dos.writeUTF(((TextSection) section).getHeader());
                         dos.writeUTF(((TextSection) section).getContent());
                         break;
                     case ACHIEVEMENT:
@@ -89,7 +88,7 @@ public class DataStreamSerializer implements StreamSerializer {
         switch (section) {
             case PERSONAL:
             case OBJECTIVE:
-                return new TextSection(dis.readUTF(), dis.readUTF());
+                return new TextSection(dis.readUTF());
             case ACHIEVEMENT:
             case QUALIFICATIONS:
                 return new ListSection(readList(dis, dis::readUTF));

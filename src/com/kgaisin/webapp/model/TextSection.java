@@ -8,19 +8,13 @@ import java.util.Objects;
 public class TextSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
 
-    private String header;
     private String content;
 
     public TextSection() {
     }
 
-    public TextSection(String header, String content) {
-        this.header = header;
+    public TextSection(String content) {
         this.content = content;
-    }
-
-    public String getHeader() {
-        return header;
     }
 
     public String getContent() {
@@ -32,20 +26,19 @@ public class TextSection extends AbstractSection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TextSection that = (TextSection) o;
-        return header.equals(that.header) &&
-                content.equals(that.content);
+        return Objects.equals(content, that.content);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(header, content);
+        return Objects.hash(content);
     }
 
     @Override
     public String toString() {
-        return "TextSection{" +
-                "header='" + header + '\'' +
-                ", content='" + content + '\'' +
-                '}';
+        final StringBuffer sb = new StringBuffer("TextSection{");
+        sb.append("content='").append(content).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }
