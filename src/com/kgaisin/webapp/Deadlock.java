@@ -1,42 +1,28 @@
 package com.kgaisin.webapp;
 
 public class Deadlock {
-    private static final Object Lock1 = new Object();
-    private static final Object Lock2 = new Object();
+    private static Object LOCK1;
+    private static Object LOCK2;
 
     public static void main(String[] args) {
-        Runnable task1 = () -> {
-            synchronized (Lock1) {
-                System.out.println("Holding lock 1");
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-                System.out.println("Waiting for lock 2");
-                synchronized (Lock2) {
-                    System.out.println("Holding lock 1 and 2");
-                }
-            }
-        };
+        LOCK1 = "lock 1";
+        LOCK2 = "lock 2";
+        new Thread(() -> holdLocks(LOCK1, LOCK2)).start();
+        new Thread(() -> holdLocks(LOCK2, LOCK1)).start();
+    }
 
-        Runnable task2 = () -> {
-            synchronized (Lock2) {
-                System.out.println("Holding lock 2");
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-                System.out.println("Waiting for lock 1");
-                synchronized (Lock1) {
-                    System.out.println("Holding lock 1 and 2");
-                }
+    private static void holdLocks(Object lock1, Object lock2) {
+        synchronized (lock1) {
+            System.out.println("Holding " + lock1);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
             }
-        };
-        Thread thread1 = new Thread(task1);
-        Thread thread2 = new Thread(task2);
-        thread1.start();
-        thread2.start();
+            System.out.println("Waiting for " + lock2);
+            synchronized (lock2) {
+                System.out.println("Holding locks 1 and 2");
+            }
+        }
     }
 }
