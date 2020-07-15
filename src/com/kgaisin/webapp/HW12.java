@@ -1,13 +1,12 @@
 package com.kgaisin.webapp;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class HW12 {
 
-    static int[] values = {7, 2, 1, 9, 1, 1, 2};
+    static int[] values = {7, 2, 1, 9, 1, 1, 2, 4};
 
     static List<Integer> valueList = Arrays.stream(values).boxed().collect(Collectors.toList());
 
@@ -17,32 +16,21 @@ public class HW12 {
     }
 
     static int minValue(int[] values) {
-        List<Integer> uniques = Arrays.stream(values)
+        return Arrays.stream(values)
                 .boxed()
                 .distinct()
                 .sorted()
-                .collect(Collectors.toList());
-
-        int num = 0;
-
-        for (int nextNum : uniques) {
-            num = num * 10 + nextNum;
-        }
-        return num;
+                .reduce((num, nextNum) -> num * 10 + nextNum)
+                .orElse(0);
     }
 
     static List<Integer> oddOrEven(List<Integer> integers) {
-        List<Integer> toRemove = new ArrayList<>();
         int sum = integers.stream().mapToInt(Integer::intValue).sum();
+        boolean odd = sum % 2 != 0;
+        boolean even = sum % 2 == 0;
         System.out.println("Sum is " + sum);
-        if(sum % 2 != 0) {
-            integers.forEach(entry -> {
-                if(entry % 2 != 0) {
-                    toRemove.add(entry);
-                }
-            });
-        }
-        integers.removeAll(toRemove);
-        return integers;
+        return integers.stream()
+                .filter(entry -> entry % 2 == 0 ? even : odd)
+                .collect(Collectors.toList());
     }
 }
