@@ -9,6 +9,9 @@ public class HW12 {
     static int[] values = {7, 2, 1, 9, 1, 1, 2, 4};
 
     static List<Integer> valueList = Arrays.stream(values).boxed().collect(Collectors.toList());
+    static int sum = valueList.stream().mapToInt(Integer::intValue).sum();
+    static boolean odd = sum % 2 != 0;
+    static boolean even = sum % 2 == 0;
 
     public static void main(String[] args) {
         System.out.println("Performing minValue function \n" + minValue(values));
@@ -17,7 +20,6 @@ public class HW12 {
 
     static int minValue(int[] values) {
         return Arrays.stream(values)
-                .boxed()
                 .distinct()
                 .sorted()
                 .reduce((num, nextNum) -> num * 10 + nextNum)
@@ -25,9 +27,6 @@ public class HW12 {
     }
 
     static List<Integer> oddOrEven(List<Integer> integers) {
-        int sum = integers.stream().mapToInt(Integer::intValue).sum();
-        boolean odd = sum % 2 != 0;
-        boolean even = sum % 2 == 0;
         System.out.println("Sum is " + sum);
         return integers.stream()
                 .filter(entry -> entry % 2 == 0 ? even : odd)
