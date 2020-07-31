@@ -25,10 +25,9 @@ public class HW12 {
 
     static List<Integer> oddOrEven(List<Integer> integers) {
         int sum = valueList.stream().mapToInt(Integer::intValue).sum();
-        boolean isSumEven = sum % 2 == 0;
         System.out.println("Sum is " + sum);
         return integers.stream()
-                .filter(entry -> (entry % 2 == 0) != isSumEven)
+                .filter(entry -> entry % 2 != sum %2)
                 .collect(Collectors.toList());
     }
 }
