@@ -5,7 +5,6 @@ import com.kgaisin.webapp.exception.StorageException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.function.Function;
 
 public class SqlHelper {
 
@@ -24,11 +23,23 @@ public class SqlHelper {
              PreparedStatement statement = connection.prepareStatement(sql)) {
             return executor.execute(statement);
         } catch (SQLException e) {
-            throw new StorageException(e);
+            throw ExceptionUtil.convertException(e);
         }
     }
 
-    public interface SqlExecutor<T> {
-        T execute(PreparedStatement statement) throws SQLException;
+    public <T> T transactionalExecute(SqlTransaction<T> executor) {
+        try (Connection conn = connectionFactory.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                T res = executor.execute(conn);
+                conn.commit();
+                return res;
+            } catch (SQLException e) {
+                conn.rollback();
+                throw ExceptionUtil.convertException(e);
+            }
+        } catch (SQLException e) {
+            throw new StorageException(e);
+        }
     }
 }
