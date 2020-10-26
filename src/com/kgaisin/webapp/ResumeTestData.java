@@ -138,7 +138,7 @@ public class ResumeTestData {
 
     public static Resume addData(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-        Map<ContactType, Link> contacts = new EnumMap<>(ContactType.class);
+        Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
         Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
         int testDataNum = 1;
@@ -171,11 +171,11 @@ public class ResumeTestData {
         }
         testEducation.add(testPositionWithMultiplePeriods);
 
-        contacts.put(ContactType.MOBILE_PHONE, new Link(testData, ""));
-        contacts.put(ContactType.HOME_PHONE, new Link(testData, ""));
+        contacts.put(ContactType.MOBILE_PHONE, testData);
+        contacts.put(ContactType.HOME_PHONE, testData);
         for (ContactType value : ContactType.values()) {
             if (value != ContactType.MOBILE_PHONE && value != ContactType.HOME_PHONE) {
-                contacts.put(value, new Link(testHeader, testUrl));
+                contacts.put(value, testData);
                 testDataNum++;
             }
         }

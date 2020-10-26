@@ -19,7 +19,7 @@ public class Resume implements Comparable<Resume>, Serializable {
     private String fullName;
 
     private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
-    private Map<ContactType, Link> contacts = new EnumMap<>(ContactType.class);
+    private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
 
     public Resume() {
     }
@@ -41,7 +41,7 @@ public class Resume implements Comparable<Resume>, Serializable {
         return fullName;
     }
 
-    public void setContacts(Map<ContactType, Link> contacts) {
+    public void setContacts(Map<ContactType, String> contacts) {
         this.contacts = contacts;
     }
 
@@ -53,11 +53,11 @@ public class Resume implements Comparable<Resume>, Serializable {
         return sections;
     }
 
-    public Map<ContactType, Link> getContacts() {
+    public Map<ContactType, String> getContacts() {
         return contacts;
     }
 
-    public void addContact(ContactType type, Link value) {
+    public void addContact(ContactType type, String value) {
         contacts.put(type, value);
     }
 

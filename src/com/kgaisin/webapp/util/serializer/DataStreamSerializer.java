@@ -19,10 +19,10 @@ public class DataStreamSerializer implements StreamSerializer {
             writeSection(dos, r.getContacts().entrySet(), contacts -> {
                 dos.writeUTF(contacts.getKey().name());
                 if (contacts.getKey() == ContactType.MOBILE_PHONE || contacts.getKey() == ContactType.HOME_PHONE) {
-                    dos.writeUTF(contacts.getValue().getName());
+                    dos.writeUTF(contacts.getValue());
                 } else {
-                    dos.writeUTF(contacts.getValue().getName());
-                    dos.writeUTF(contacts.getValue().getUrl());
+                    dos.writeUTF(contacts.getValue());
+                    dos.writeUTF(contacts.getValue());
                 }
             });
             writeSection(dos, r.getSections().entrySet(), sections -> {
@@ -64,9 +64,9 @@ public class DataStreamSerializer implements StreamSerializer {
             readEntries(dis, () -> {
                 ContactType contactType = ContactType.valueOf(dis.readUTF());
                 if (contactType == ContactType.MOBILE_PHONE || contactType == ContactType.HOME_PHONE) {
-                    resume.addContact(contactType, new Link(dis.readUTF(), ""));
+                    resume.addContact(contactType, dis.readUTF());
                 } else {
-                    resume.addContact(contactType, new Link(dis.readUTF(), dis.readUTF()));
+                    resume.addContact(contactType, dis.readUTF());
                 }
             });
             readEntries(dis, () -> {

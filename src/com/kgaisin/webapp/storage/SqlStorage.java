@@ -42,14 +42,13 @@ public class SqlStorage implements Storage {
                     do {
                         String value = rs.getString("value");
                         ContactType type = ContactType.valueOf(rs.getString("type"));
-                        //todo опять проблема с тем, что Contact<String, Link> а не String, String
                         r.addContact(type, value);
                     } while (rs.next());
 
                     return r;
                 });
     }
-
+    
     @Override
     public void update(Resume r) {
         sqlHelper.execStatement("UPDATE resume SET full_name =? WHERE uuid =?", ps -> {
@@ -71,7 +70,7 @@ public class SqlStorage implements Storage {
                         ps.execute();
                     }
                     try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (resume_uuid, type, value) VALUES (?,?,?)")) {
-                        for (Map.Entry<ContactType, Link> e : r.getContacts().entrySet()) {
+                        for (Map.Entry<ContactType, String> e : r.getContacts().entrySet()) {
                             ps.setString(1, r.getUuid());
                             ps.setString(2, e.getKey().name());
                             ps.setString(3, e.getValue());
