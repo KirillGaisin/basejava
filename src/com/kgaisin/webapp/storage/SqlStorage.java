@@ -74,7 +74,6 @@ public class SqlStorage implements Storage {
             List<Resume> resumes = new ArrayList<>();
             while (rs.next()) {
                 resumes.add(getContacts(rs.getString("uuid")));
-                //resumes.add(new Resume(rs.getString("uuid"), rs.getString("full_name")));
             }
             return resumes;
         });
