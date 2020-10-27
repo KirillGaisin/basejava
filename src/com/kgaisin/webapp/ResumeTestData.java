@@ -139,7 +139,7 @@ public class ResumeTestData {
     public static Resume addData(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
         Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-        Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+//        Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
         int testDataNum = 1;
         String testHeader = "testHeader" + testDataNum;
@@ -180,15 +180,15 @@ public class ResumeTestData {
             }
         }
 
-        sections.put(SectionType.OBJECTIVE, new TextSection(testData));
-        sections.put(SectionType.PERSONAL, new TextSection(testData));
-        sections.put(SectionType.ACHIEVEMENT, new ListSection(testAchievements));
-        sections.put(SectionType.QUALIFICATIONS, new ListSection(testQualifications));
-        sections.put(SectionType.EXPERIENCE, new ExperienceSection(testJobs));
-        sections.put(SectionType.EDUCATION, new ExperienceSection(testEducation));
+//        sections.put(SectionType.OBJECTIVE, new TextSection(testData));
+//        sections.put(SectionType.PERSONAL, new TextSection(testData));
+//        sections.put(SectionType.ACHIEVEMENT, new ListSection(testAchievements));
+//        sections.put(SectionType.QUALIFICATIONS, new ListSection(testQualifications));
+//        sections.put(SectionType.EXPERIENCE, new ExperienceSection(testJobs));
+//        sections.put(SectionType.EDUCATION, new ExperienceSection(testEducation));
 
         resume.setContacts(contacts);
-        resume.setSections(sections);
+//        resume.setSections(sections);
         return resume;
     }
 }
